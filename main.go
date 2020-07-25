@@ -5,9 +5,9 @@ import (
 	"github.com/chenrun666/gin_demo/config"
 	"github.com/chenrun666/gin_demo/router"
 	"github.com/gin-gonic/gin"
+	"github.com/lexkong/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"log"
 	"net/http"
 	"time"
 )
@@ -33,13 +33,13 @@ func main() {
 
 	go func() {
 		if err := pingServer(); err != nil {
-			log.Fatalln("The router has no response, or it might took too long to start up.", err)
+			log.Fatal("The router has no response, or it might took too long to start up.", err)
 		}
-		log.Println("The router has been deployed successfully.")
+		log.Info("The router has been deployed successfully.")
 	}()
 
-	log.Printf("Start to listening the incoming requests on http address:%s\n", viper.GetString("addr"))
-	log.Printf(http.ListenAndServe(viper.GetString("addr"), g).Error())
+	log.Infof("Start to listening the incoming requests on http address:%s\n", viper.GetString("addr"))
+	log.Info(http.ListenAndServe(viper.GetString("addr"), g).Error())
 }
 
 func pingServer() error {
@@ -49,7 +49,7 @@ func pingServer() error {
 			return nil
 		}
 
-		log.Println("Waiting for the router, retry in 1 second")
+		log.Info("Waiting for the router, retry in 1 second")
 		time.Sleep(time.Second)
 	}
 

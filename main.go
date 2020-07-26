@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"github.com/chenrun666/gin_demo/config"
+	"github.com/chenrun666/gin_demo/model"
 	"github.com/chenrun666/gin_demo/router"
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"
@@ -22,6 +23,9 @@ func main() {
 	if err := config.Init(*cfg); err != nil {
 		panic(err)
 	}
+
+	model.DB.Init()
+	defer model.DB.Close()
 
 	gin.SetMode(viper.GetString("runmode"))
 

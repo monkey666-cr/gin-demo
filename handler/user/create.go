@@ -2,25 +2,26 @@ package user
 
 import (
 	"fmt"
+	"github.com/chenrun666/gin_demo/handler"
 	"github.com/chenrun666/gin_demo/pkg/errno"
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"
-	"net/http"
 )
 
 func Create(c *gin.Context) {
-	var r struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
+	var r CreateRequest
 
 	var err error
 	if err := c.Bind(&r); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"error": errno.ErrBind,
-		})
+		handler.SendResponse(c, errno.ErrBind, nil)
 		return
 	}
+
+	admin2 := c.Param("username")
+	log.Infof("URL username: %s", admin2)
+
+	desc := c.Query("desc")
+	log.Infof("URL key param desc: %s", desc)
 
 	log.Debugf("username is: [%s], password is [%s]", r.Username, r.Password)
 	if r.Username == "" {
@@ -36,9 +37,8 @@ func Create(c *gin.Context) {
 		err = fmt.Errorf("password is empty")
 	}
 
-	code, message := errno.DecodeErr(err)
-	c.JSON(http.StatusOK, gin.H{
-		"code":    code,
-		"message": message,
-	})
+	rsp := CreateResponse{
+		Username: r.Username,
+	}
+	handler.SendResponse(c, nil, rsp)
 }

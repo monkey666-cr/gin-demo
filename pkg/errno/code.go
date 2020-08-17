@@ -5,6 +5,14 @@ var (
 	InternalServerError = &Errno{Code: 10001, Message: "Internal server error"}
 	ErrBind             = &Errno{Code: 10002, Message: "Error occurred while binding the requests body to the struct"}
 
-	// users errors
-	ErrUserNotFound = &Errno{Code: 20102, Message: "The user was not found"}
+	// validation error
+	ErrValidation = &Errno{Code: 20001, Message: "Validation failed."}
+	ErrDatabase   = &Errno{Code: 20002, Message: "Database error."}
+	ErrToken      = &Errno{Code: 20003, Message: "Error occurred while signing the JSON web token."}
+
+	// users.http errors
+	ErrEncrypt           = &Errno{Code: 20101, Message: "Error occurred while encrypting the user password."}
+	ErrUserNotFound      = &Errno{Code: 20102, Message: "The user was not found"}
+	ErrTokenInvalid      = &Errno{Code: 20103, Message: "The token was invalid."}
+	ErrPasswordIncorrect = &Errno{Code: 2014, Message: "The password was incorrect"}
 )

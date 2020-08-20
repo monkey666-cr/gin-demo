@@ -1,44 +1,46 @@
 package user
 
 import (
-	"fmt"
 	"github.com/chenrun666/gin_demo/handler"
+	"github.com/chenrun666/gin_demo/model"
 	"github.com/chenrun666/gin_demo/pkg/errno"
+	"github.com/chenrun666/gin_demo/util"
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"
+	"github.com/lexkong/log/lager"
 )
 
 func Create(c *gin.Context) {
+	log.Info("User Create function called.", lager.Data{"X-Request-Id": util.GetReqID(c)})
 	var r CreateRequest
-
-	var err error
 	if err := c.Bind(&r); err != nil {
 		handler.SendResponse(c, errno.ErrBind, nil)
 		return
 	}
 
-	admin2 := c.Param("username")
-	log.Infof("URL username: %s", admin2)
-
-	desc := c.Query("desc")
-	log.Infof("URL key param desc: %s", desc)
-
-	log.Debugf("username is: [%s], password is [%s]", r.Username, r.Password)
-	if r.Username == "" {
-		err = errno.New(errno.ErrUserNotFound, fmt.Errorf("username can ot found in db: xx.xx.xx.xx")).Add("This is add message")
-		log.Errorf(err, "Get an error")
+	u := model.UserModel{
+		Username: r.Username,
+		Password: r.Password,
 	}
 
-	if errno.IsErrUserNotFound(err) {
-		log.Debug("err type is ErrUserNotFound")
+	if err := u.Validate(); err != nil {
+		handler.SendResponse(c, errno.ErrValidation, nil)
+		return
 	}
 
-	if r.Password == "" {
-		err = fmt.Errorf("password is empty")
+	if err := u.Encrypt(); err != nil {
+		handler.SendResponse(c, errno.ErrEncrypt, nil)
+		return
+	}
+
+	if err := u.Create(); err != nil {
+		handler.SendResponse(c, errno.ErrDatabase, nil)
+		return
 	}
 
 	rsp := CreateResponse{
 		Username: r.Username,
 	}
+
 	handler.SendResponse(c, nil, rsp)
 }

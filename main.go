@@ -5,6 +5,7 @@ import (
 	"github.com/chenrun666/gin_demo/config"
 	"github.com/chenrun666/gin_demo/model"
 	"github.com/chenrun666/gin_demo/router"
+	"github.com/chenrun666/gin_demo/router/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"
 	"github.com/spf13/pflag"
@@ -31,7 +32,10 @@ func main() {
 
 	g := gin.New()
 
-	var middlewares []gin.HandlerFunc
+	//var middlewares []gin.HandlerFunc
+	middlewares := []gin.HandlerFunc{
+		middleware.RequestId(),
+	}
 
 	router.Load(g, middlewares...)
 

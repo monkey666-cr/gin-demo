@@ -8,6 +8,7 @@ require (
 	github.com/go-playground/validator/v10 v10.2.0
 	github.com/jinzhu/gorm v1.9.15
 	github.com/lexkong/log v0.0.0-20180607165131-972f9cd951fc
+	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.0
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf

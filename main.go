@@ -35,6 +35,7 @@ func main() {
 	//var middlewares []gin.HandlerFunc
 	middlewares := []gin.HandlerFunc{
 		middleware.RequestId(),
+		middleware.Logging(),
 	}
 
 	router.Load(g, middlewares...)

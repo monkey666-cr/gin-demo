@@ -3,3 +3,8 @@
 log/
 
 http/
+
+gin_demo
+
+*.crt
+*.key
